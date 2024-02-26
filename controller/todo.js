@@ -33,16 +33,19 @@ const createtodoController = async (req, res, next) => {
   }
 };
 
-const updatetodoformController = (req, res, next) => {
+const updatetodoformController = async (req, res, next) => {
   try {
-    res.render("updateTodo", { title: "update todo" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    const { id } = req.query;
+    const todo = await Todo.findById(id);
+
+    res.render("updateTodo", { title: "Update todo" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 const deletetodoformController = (req, res, next) => {
   try {
-    res.render("DeleteTodo", { title: "Delete todo" });
+    res.render("deleteTodo",{ title: "Delete todo" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

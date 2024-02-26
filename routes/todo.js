@@ -5,7 +5,7 @@ const todoController = require("../controller/todo");
 router.get("/", todoController.getAllTodocontroller);
 router.get("/add-todo", todoController.addtodoformController);
 router.post("/add-todo", todoController.createtodoController);
-router.post("/update-todo", todoController.updatetodoformController);
-router.post("/delete-todo", todoController.deletetodoformController);
+router.get("/update-todo", todoController.updatetodoformController);
+router.get("/delete-todo", todoController.deletetodoformController);
 
 module.exports = router;
