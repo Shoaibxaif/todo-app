@@ -45,7 +45,8 @@ const updatetodoformController = async (req, res, next) => {
 };
 const deletetodoformController = (req, res, next) => {
   try {
-    res.render("deleteTodo", { title: "Delete todo" });
+    const { id } = req.query;
+    res.render("deleteTodo", { title: "Delete todo" , id });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -70,11 +71,29 @@ const updateTodoController = async (req, res, next) => {
   }
 };
 
+const  deleteTodoController = async (req, res, next) => {
+  try{
+    const { id,confirm} = req.query;
+    if(confirm === "yes"){
+      await  Todo.findByIdAndDelete(id);
+    }
+
+    
+    res.redirect("/");
+   
+  }catch(err){
+    res.status(500).json({ message: err.message });
+  
+
+  }
+}
+
 module.exports = {
   getAllTodocontroller,
   addtodoformController,
   createtodoController,
   updatetodoformController,
   deletetodoformController,
-  updateTodoController
+  updateTodoController,
+  deleteTodoController
 };
