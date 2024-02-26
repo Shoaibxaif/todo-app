@@ -38,16 +38,35 @@ const updatetodoformController = async (req, res, next) => {
     const { id } = req.query;
     const todo = await Todo.findById(id);
 
-    res.render("updateTodo", { title: "Update todo" });
+    res.render("updateTodo", { title: "Update todo", todo });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 const deletetodoformController = (req, res, next) => {
   try {
-    res.render("deleteTodo",{ title: "Delete todo" });
+    res.render("deleteTodo", { title: "Delete todo" });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+const updateTodoController = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { title, desc } = req.body;
+    const todo = await Todo.findById(id);
+    if (!todo) {
+      return res.status(404).json({ message: "No todo with this ID found." });
+    }
+    todo.title = title;
+    todo.desc = desc;
+
+    await todo.save();
+    res.redirect("/");
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  
   }
 };
 
@@ -57,4 +76,5 @@ module.exports = {
   createtodoController,
   updatetodoformController,
   deletetodoformController,
+  updateTodoController
 };
