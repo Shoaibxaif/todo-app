@@ -3,20 +3,16 @@ const mongoose = require("mongoose");
 const path = require("path");
 const bodyParser = require("body-parser");
 const moment = require("moment");
+const MongodbConnection = require('./init/mongodb');
+
+MongodbConnection();
 
 const PORT = 8000;
 const app = express();
 
-const connectionUrl = "mongodb://localhost:27017/todoDb";
 
-mongoose
-  .connect(connectionUrl)
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+
+
 
 const todoSchema = new mongoose.Schema(
   {
