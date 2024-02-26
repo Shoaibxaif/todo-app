@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const bodyParser = require("body-parser");
+const moment = require("moment");
 
 const PORT = 8000;
 const app = express();
@@ -32,9 +33,11 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-app.get("/", (req, res, next) => {
+app.get("/", async (req, res, next) => {
   try {
-    res.render("index", { title: "List Todo" });
+    const todos = await Todo.find().sort({createdAt : -1});
+    res.locals.moment = moment;
+    res.render("index", { title: "List Todo" , todos });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -50,10 +53,11 @@ app.get("/add-todo", (req, res, next) => {
 
 app.post("/add-todo", async (req, res, next) => {
   try {
+   
+    const { title, desc } = req.body;
     if(!title){
       return res.status(400).json({message:"Title is empty!"});
     }
-    const { title, desc } = req.body;
     const newTodo = new Todo({ title, desc });
     await newTodo.save();
     res.status(201).redirect("/");
